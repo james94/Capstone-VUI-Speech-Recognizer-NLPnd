@@ -1,7 +1,7 @@
 [//]: # (Image References)
 
 [image1]: ./images/pipeline.png "ASR Pipeline"
-[image2]: ./images/select_kernel.png "select aind-vui kernel"
+[image2]: ./images/select_kernel.png "select nlp-vui kernel"
 
 # Introduction
 
@@ -29,15 +29,15 @@ You should run this project with GPU acceleration for best performance.
 
 1. Clone the repository, and navigate to the downloaded folder.
 ```
-git clone https://github.com/udacity/AIND-VUI-Capstone.git
-cd AIND-VUI-Capstone
+git clone hhttps://github.com/james94/Capstone-VUI-Speech-Recognizer-NLPnd
+cdCapstone-VUI-Speech-Recognizer-NLPnd
 ```
 
 2. Create (and activate) a new environment with Python 3.6 and the `numpy` package.
 
 	- __Linux__ or __Mac__: 
 	```
-	conda create --name aind-vui python=3.5 numpy
+	conda create --name nlp-vui python=3.5 numpy
 	source activate nlp-vui
 	```
 	- __Windows__: 
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 	```
 	- __NOTE:__ a Keras/Windows bug may give this error after the first epoch of training model 0: `‘rawunicodeescape’ codec can’t decode bytes in position 54-55: truncated \uXXXX `. 
 To fix it: 
-		- Find the file `keras/utils/generic_utils.py` that you are using for the capstone project. It should be in your environment under `Lib/site-packages` . This may vary, but if using miniconda, for example, it might be located at `C:/Users/username/Miniconda3/envs/aind-vui/Lib/site-packages/keras/utils`.
+		- Find the file `keras/utils/generic_utils.py` that you are using for the capstone project. It should be in your environment under `Lib/site-packages` . This may vary, but if using miniconda, for example, it might be located at `C:/Users/username/Miniconda3/envs/nlp-vui/Lib/site-packages/keras/utils`.
 		- Copy `generic_utils.py` to `OLDgeneric_utils.py` just in case you need to restore it.
 		- Open the `generic_utils.py` file and change this code line:</br>`marshal.dumps(func.code).decode(‘raw_unicode_escape’)`</br>to this code line:</br>`marshal.dumps(func.code).replace(b’\’,b’/’).decode(‘raw_unicode_escape’)`
 
@@ -104,7 +104,7 @@ cd /usr/bin && sudo ln ffmpeg avconv && sudo ln ffmpeg avprobe
 	cd LibriSpeech
 	./flac_to_wav.sh
 	```
-	- __Windows__: Download two files ([file 1](http://www.openslr.org/resources/12/dev-clean.tar.gz) and [file 2](http://www.openslr.org/resources/12/test-clean.tar.gz)) via browser and save in the `AIND-VUI-Capstone` directory.  Extract them with an application that is compatible with `tar` and `gz` such as [7-zip](http://www.7-zip.org/) or [WinZip](http://www.winzip.com/). Convert the files from your terminal window.
+	- __Windows__: Download two files ([file 1](http://www.openslr.org/resources/12/dev-clean.tar.gz) and [file 2](http://www.openslr.org/resources/12/test-clean.tar.gz)) via browser and save in the `Capstone-VUI-Speech-Recognizer-NLPnd` directory.  Extract them with an application that is compatible with `tar` and `gz` such as [7-zip](http://www.7-zip.org/) or [WinZip](http://www.winzip.com/). Convert the files from your terminal window.
 	```
 	move flac_to_wav.sh LibriSpeech
 	cd LibriSpeech
@@ -118,15 +118,13 @@ python create_desc_json.py LibriSpeech/dev-clean/ train_corpus.json
 python create_desc_json.py LibriSpeech/test-clean/ valid_corpus.json
 ```
 
-9. Create an [IPython kernel](http://ipython.readthedocs.io/en/stable/install/kernel_install.html) for the `aind-vui` environment.  Open the notebook.
+9. Create an [IPython kernel](http://ipython.readthedocs.io/en/stable/install/kernel_install.html) for the `nlp-vui` environment.  Open the notebook.
 ```
-python -m ipykernel install --user --name aind-vui --display-name "aind-vui"
+python -m ipykernel install --user --name nlp-vui --display-name "nlp-vui"
 jupyter notebook vui_notebook.ipynb
 ```
 
-10. Before running code, change the kernel to match the `aind-vui` environment by using the drop-down menu.  Then, follow the instructions in the notebook.
-
-![select aind-vui kernel][image2]
+10. Before running code, change the kernel to match the `nlp-vui` environment by using the drop-down menu.  Then, follow the instructions in the notebook.
 
 __NOTE:__ While some code has already been implemented to get you started, you will need to implement additional functionality to successfully answer all of the questions included in the notebook. __Unless requested, do not modify code that has already been included.__
 
@@ -134,8 +132,6 @@ __NOTE:__ While some code has already been implemented to get you started, you w
 ## Amazon Web Services (Option)
 
 Launch a GPU EC2 instance. For instance, you can choose to launch [AWS Deep Learning AMI (Ubuntu 18.04)](https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-AWS-Deep-Learning-AMI-Ubuntu-1/B07Y43P7X5) as a GPU instance.
-
-This project requires GPU acceleration to run efficiently. Please refer to the Udacity instructions for setting up a GPU instance for this project, and refer to the project instructions in the classroom for setup. [link for AIND students](https://classroom.udacity.com/nanodegrees/nd889/parts/4550d1eb-a3e0-4e9b-9d3c-4f55aa6662b5/modules/c8419a1e-acd3-4463-9c01-a4c93f7c3b24/lessons/b27e9b6a-bb3b-4f3e-8993-bdfcb662a426/concepts/61c0743f-22f1-47db-a4d2-5616c25fc888)
 
 1. Follow the Cloud Computing Setup instructions lesson to create an EC2 instance. (The lesson includes all the required package and library installation instructions.)
 
