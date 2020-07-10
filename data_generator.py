@@ -12,8 +12,8 @@ import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from utils import calc_feat_dim, spectrogram_from_file, text_to_int_sequence
-from utils import conv_output_length
+from utils_asr import calc_feat_dim, spectrogram_from_file, text_to_int_sequence
+from utils_asr import conv_output_length
 
 RNG_SEED = 123
 
@@ -317,9 +317,12 @@ def plot_mfcc_feature(vis_mfcc_feature):
     plt.title('Normalized MFCC')
     plt.ylabel('Time')
     plt.xlabel('MFCC Coefficient')
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.05)
-    plt.colorbar(im, cax=cax)
+    # Found on Windows 10, the divider causes colobar to take over entire plot
+#     divider = make_axes_locatable(ax)
+#     cax = divider.append_axes("right", size="5%", pad=0.05)
+#     plt.colorbar(im, cax=cax)
+    # Place vertical colorbar on right side of im plot
+    plt.colorbar(im, ax=[ax], location='right')
     ax.set_xticks(np.arange(0, 13, 2), minor=False);
     plt.show()
 
@@ -331,8 +334,13 @@ def plot_spectrogram_feature(vis_spectrogram_feature):
     plt.title('Normalized Spectrogram')
     plt.ylabel('Time')
     plt.xlabel('Frequency')
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.05)
-    plt.colorbar(im, cax=cax)
+    # Create an axes on the right side of ax. The width of cax will be 5%
+    # of ax and the padding between cax and ax will be fixed at 0.2 inch
+    # Found on Windows 10, the divider causes colobar to take over entire plot
+#     divider = make_axes_locatable(ax)
+#     cax = divider.append_axes("right", size="1%", pad=0.05)
+#     plt.colorbar(im, cax=cax)
+    # Place vertical colorbar on right side of im plot
+    plt.colorbar(im, ax=[ax], location='right')
     plt.show()
 
