@@ -4,6 +4,7 @@ Defines a functions for training a NN.
 
 from data_generator import AudioGenerator
 import _pickle as pickle
+import tensorflow as tf
 
 from keras import backend as K
 from keras.models import Model
@@ -42,6 +43,9 @@ def train_model(input_to_softmax,
                 verbose=1,
                 sort_by_duration=False,
                 max_duration=10.0):
+    
+    # Allow for dealing with multiple models and keras sessions
+    K.get_session().run(tf.global_variables_initializer())
     
     # create a class instance for obtaining batches of data
     audio_gen = AudioGenerator(minibatch_size=minibatch_size, 
