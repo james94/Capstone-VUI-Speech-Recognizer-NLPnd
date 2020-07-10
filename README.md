@@ -3,49 +3,27 @@
 [image1]: ./images/pipeline.png "ASR Pipeline"
 [image2]: ./images/select_kernel.png "select aind-vui kernel"
 
-## Project Overview
+# Introduction
 
-In this notebook, you will build a deep neural network that functions as part of an end-to-end automatic speech recognition (ASR) pipeline!  
+In this project, I built multiple deep neural networks (...) that can function as part of an end-to-end Automatic Speech Recognition (ASR) pipeline. This pipeline accepts raw audio as input, then maps these audio features to transcribed text and returns text.
+
+The pipeline consists of:
+
+- Feature Extraction
+- Acoustic Model
+- Decoder
 
 ![ASR Pipeline][image1]
 
-We begin by investigating the [LibriSpeech dataset](http://www.openslr.org/12/) that will be used to train and evaluate your models. Your algorithm will first convert any raw audio to feature representations that are commonly used for ASR. You will then move on to building neural networks that can map these audio features to transcribed text. After learning about the basic types of layers that are often used for deep learning-based approaches to ASR, you will engage in your own investigations by creating and testing your own state-of-the-art models. Throughout the notebook, we provide recommended research papers for additional reading and links to GitHub repositories with interesting implementations.
+We begin by investigating the LibriSpeech dataset that will be used to train and evaluate your models. Your algorithm will first convert any raw audio to feature representations that are commonly used for ASR. You will then move on to building neural networks that can map these audio features to transcribed text. After learning about the basic types of layers that are often used for deep learning-based approaches to ASR, you will engage in your own investigations by creating and testing your own state-of-the-art models. Throughout the notebook, we provide recommended research papers for additional reading and links to GitHub repositories with interesting implementations.
 
-## Project Instructions
+# Setup
 
-### Amazon Web Services
+This project requires GPU acceleration to run efficiently.
 
-This project requires GPU acceleration to run efficiently. Please refer to the Udacity instructions for setting up a GPU instance for this project, and refer to the project instructions in the classroom for setup. [link for AIND students](https://classroom.udacity.com/nanodegrees/nd889/parts/4550d1eb-a3e0-4e9b-9d3c-4f55aa6662b5/modules/c8419a1e-acd3-4463-9c01-a4c93f7c3b24/lessons/b27e9b6a-bb3b-4f3e-8993-bdfcb662a426/concepts/61c0743f-22f1-47db-a4d2-5616c25fc888)
+## Local Machine (Option)
 
-1. Follow the Cloud Computing Setup instructions lesson to create an EC2 instance. (The lesson includes all the required package and library installation instructions.)
-
-2. Obtain the appropriate subsets of the LibriSpeech dataset, and convert all flac files to wav format.
-```
-wget http://www.openslr.org/resources/12/dev-clean.tar.gz
-tar -xzvf dev-clean.tar.gz
-wget http://www.openslr.org/resources/12/test-clean.tar.gz
-tar -xzvf test-clean.tar.gz
-mv flac_to_wav.sh LibriSpeech
-cd LibriSpeech
-./flac_to_wav.sh
-```
-
-3. Create JSON files corresponding to the train and validation datasets.
-```
-cd ..
-python create_desc_json.py LibriSpeech/dev-clean/ train_corpus.json
-python create_desc_json.py LibriSpeech/test-clean/ valid_corpus.json
-```
-
-4. Start Jupyter:
-```
-jupyter notebook --ip=0.0.0.0 --no-browser
-```
-
-5. Look at the output in the window, and find the line that looks like: `http://0.0.0.0:8888/?token=3156e...` Copy and paste the **complete** URL into the address bar of a web browser (Firefox, Safari, Chrome, etc). Before navigating to the URL, replace 0.0.0.0 in the URL with the "IPv4 Public IP" address from the EC2 Dashboard.
-
-
-### Local Environment Setup
+If you are planning to run on a local machine, I recommend only doing this option if you have a powerful GPU meant for deep learning. For instance, [ASUS - ROG GU502GV 15.6" Gaming Laptop - Intel Core i7 - 16GB Memory - NVIDIA GeForce RTX 2060 - 1TB SSD + Optane - Brushed Metallic Black](https://www.bestbuy.com/site/asus-rog-gu502gv-15-6-gaming-laptop-intel-core-i7-16gb-memory-nvidia-geforce-rtx-2060-1tb-ssd-optane-brushed-metallic-black/6338248.p?skuId=6338248).
 
 You should run this project with GPU acceleration for best performance.
 
@@ -60,30 +38,20 @@ cd AIND-VUI-Capstone
 	- __Linux__ or __Mac__: 
 	```
 	conda create --name aind-vui python=3.5 numpy
-	source activate aind-vui
+	source activate nlp-vui
 	```
 	- __Windows__: 
 	```
-	conda create --name aind-vui python=3.5 numpy scipy
-	activate aind-vui
+	conda create --name nlp-vui python=3.5 numpy scipy
+	activate nlp-vui
 	```
 
-3. Install TensorFlow.
-	- Option 1: __To install TensorFlow with GPU support__, follow [the guide](https://www.tensorflow.org/install/) to install the necessary NVIDIA software on your system.  If you are using an EC2 GPU instance, you can skip this step and only need to install the `tensorflow-gpu` package:
-	```
-	pip install tensorflow-gpu==1.1.0
-	```
-	- Option 2: __To install TensorFlow with CPU support only__,
-	```
-	pip install tensorflow==1.1.0
-	```
-
-4. Install a few pip packages.
+3. Install a few pip packages.
 ```
 pip install -r requirements.txt
 ```
 
-5. Switch [Keras backend](https://keras.io/backend/) to TensorFlow.
+4. Switch [Keras backend](https://keras.io/backend/) to TensorFlow.
 	- __Linux__ or __Mac__: 
 	```
 	KERAS_BACKEND=tensorflow python -c "from keras import backend"
@@ -112,6 +80,18 @@ To fix it:
 	rename C:\usr avconv
     set PATH=C:\avconv\bin;%PATH%
 	```
+
+~~~bash
+# Install librosa
+conda install -y -c conda-forge librosa
+conda install -y -c conda-forge av
+
+# Install avconv on Ubuntu 18.04 WSL
+# https://askubuntu.com/questions/1098407/how-do-you-install-avconv-on-ubuntu-18-04
+sudo apt-get install ffmpeg
+cd /usr/bin && sudo ln ffmpeg avconv && sudo ln ffmpeg avprobe
+~~~
+
 
 7. Obtain the appropriate subsets of the LibriSpeech dataset, and convert all flac files to wav format.
 	- __Linux__ or __Mac__: 
@@ -151,79 +131,51 @@ jupyter notebook vui_notebook.ipynb
 __NOTE:__ While some code has already been implemented to get you started, you will need to implement additional functionality to successfully answer all of the questions included in the notebook. __Unless requested, do not modify code that has already been included.__
 
 
-### Evaluation
+## Amazon Web Services (Option)
 
-Your project will be reviewed by a Udacity reviewer against the CNN project [rubric](#rubric).  Review this rubric thoroughly, and self-evaluate your project before submission.  All criteria found in the rubric must meet specifications for you to pass.
+Launch a GPU EC2 instance. For instance, you can choose to launch [AWS Deep Learning AMI (Ubuntu 18.04)](https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-AWS-Deep-Learning-AMI-Ubuntu-1/B07Y43P7X5) as a GPU instance.
+
+This project requires GPU acceleration to run efficiently. Please refer to the Udacity instructions for setting up a GPU instance for this project, and refer to the project instructions in the classroom for setup. [link for AIND students](https://classroom.udacity.com/nanodegrees/nd889/parts/4550d1eb-a3e0-4e9b-9d3c-4f55aa6662b5/modules/c8419a1e-acd3-4463-9c01-a4c93f7c3b24/lessons/b27e9b6a-bb3b-4f3e-8993-bdfcb662a426/concepts/61c0743f-22f1-47db-a4d2-5616c25fc888)
+
+1. Follow the Cloud Computing Setup instructions lesson to create an EC2 instance. (The lesson includes all the required package and library installation instructions.)
+
+2. Obtain the appropriate subsets of the LibriSpeech dataset, and convert all flac files to wav format.
+```
+wget http://www.openslr.org/resources/12/dev-clean.tar.gz
+tar -xzvf dev-clean.tar.gz
+wget http://www.openslr.org/resources/12/test-clean.tar.gz
+tar -xzvf test-clean.tar.gz
+mv flac_to_wav.sh LibriSpeech
+cd LibriSpeech
+./flac_to_wav.sh
+```
+
+3. Create JSON files corresponding to the train and validation datasets.
+```
+cd ..
+python create_desc_json.py LibriSpeech/dev-clean/ train_corpus.json
+python create_desc_json.py LibriSpeech/test-clean/ valid_corpus.json
+```
+
+4. Start Jupyter:
+```
+jupyter notebook --ip=0.0.0.0 --no-browser
+```
+
+5. Look at the output in the window, and find the line that looks like: `http://0.0.0.0:8888/?token=3156e...` Copy and paste the **complete** URL into the address bar of a web browser (Firefox, Safari, Chrome, etc). Before navigating to the URL, replace 0.0.0.0 in the URL with the "IPv4 Public IP" address from the EC2 Dashboard.
 
 
-### Project Submission
+<!-- # Automatic Speech Recogition Pipeline
 
-When you are ready to submit your project, collect the following files and compress them into a single archive for upload:
-- The `vui_notebook.ipynb` file with fully functional code, all code cells executed and displaying output, and all questions answered.
-- An HTML or PDF export of the project notebook with the name `report.html` or `report.pdf`.
-- The `sample_models.py` file with all model architectures that were trained in the project Jupyter notebook.
-- The `results/` folder containing all HDF5 and pickle files corresponding to trained models.
+## Feature Extraction
 
-Alternatively, your submission could consist of the GitHub link to your repository.
+## Acoustic Model
 
+## Decoder
 
-<a id='rubric'></a>
-## Project Rubric
+# Future Enhancements
 
-#### Files Submitted
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Submission Files      | The submission includes all required files.		|
-
-#### STEP 2: Model 0: RNN
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Trained Model 0         		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_0.pickle` are undefined.  The trained weights for the model specified in `simple_rnn_model` are stored in `model_0.h5`.   	|
-
-#### STEP 2: Model 1: RNN + TimeDistributed Dense
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Completed `rnn_model` Module         		| The submission includes a `sample_models.py` file with a completed `rnn_model` module containing the correct architecture.   	|
-| Trained Model 1         		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_1.pickle` are undefined.  The trained weights for the model specified in `rnn_model` are stored in `model_1.h5`.   	|
-
-#### STEP 2: Model 2: CNN + RNN + TimeDistributed Dense
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Completed `cnn_rnn_model` Module         		| The submission includes a `sample_models.py` file with a completed `cnn_rnn_model` module containing the correct architecture.   	|
-| Trained Model 2         		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_2.pickle` are undefined.  The trained weights for the model specified in `cnn_rnn_model` are stored in `model_2.h5`.   	|
-
-#### STEP 2: Model 3: Deeper RNN + TimeDistributed Dense
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Completed `deep_rnn_model` Module         		| The submission includes a `sample_models.py` file with a completed `deep_rnn_model` module containing the correct architecture.   	|
-| Trained Model 3         		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_3.pickle` are undefined.  The trained weights for the model specified in `deep_rnn_model` are stored in `model_3.h5`.   	|
-
-#### STEP 2: Model 4: Bidirectional RNN + TimeDistributed Dense
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Completed `bidirectional_rnn_model` Module         		| The submission includes a `sample_models.py` file with a completed `bidirectional_rnn_model` module containing the correct architecture.   	|
-| Trained Model 4         		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_4.pickle` are undefined.  The trained weights for the model specified in `bidirectional_rnn_model` are stored in `model_4.h5`.   	|
-
-#### STEP 2: Compare the Models
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Question 1         		| The submission includes a detailed analysis of why different models might perform better than others.   	|
-
-#### STEP 2: Final Model
-
-| Criteria       		|     Meets Specifications	        			            | 
-|:---------------------:|:---------------------------------------------------------:| 
-| Completed `final_model` Module         		| The submission includes a `sample_models.py` file with a completed `final_model` module containing a final architecture that is not identical to any of the previous architectures.   	|
-| Trained Final Model        		| The submission trained the model for at least 20 epochs, and none of the loss values in `model_end.pickle` are undefined.  The trained weights for the model specified in `final_model` are stored in `model_end.h5`.   	|
-| Question 2         		| The submission includes a detailed description of how the final model architecture was designed.   	|
-
+# Resources -->
 
 ## Suggestions to Make your Project Stand Out!
 
